@@ -2,7 +2,7 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import defaultdict, Counter
 import os.path
 from itertools import chain
-from constants import OFFSET
+from .constants import OFFSET
 
 def docsToBOWs(keyfile):
     if os.path.exists (keyfile):
@@ -17,9 +17,9 @@ def docsToBOWs(keyfile):
                     for line in infile: 
                         decoded = line.decode('ascii','ignore')
                         # YOUR CODE HERE
-                for word,count in fcounts.items():
-                    print >>outfile,"{}:{}".format(word,count), #write the word and its count to a line
-                print >>outfile,""
+                for word,count in list(fcounts.items()):
+                    print("{}:{}".format(word,count), end=' ', file=outfile) #write the word and its count to a line
+                print("", file=outfile)
 
 def dataIterator(keyfile,test_mode=False):
     """
@@ -61,5 +61,5 @@ def getCountsAndKeys (trainkey):
     for words,label in dataIterator(trainkey):
         counts[label] += Counter(words)
         class_counts[label] += 1
-    allkeys = set(chain.from_iterable(count.keys() for count in counts.values()))
+    allkeys = set(chain.from_iterable(list(count.keys()) for count in list(counts.values())))
     return counts, class_counts, allkeys
